@@ -1,0 +1,40 @@
+server:
+  port: 8001
+
+spring:
+  application:
+    name: cloud-payment-service
+    zipkin:
+      base-url: http://localhost:9411
+    sleuth:
+      sampler:
+        #采样率值介于0到1之间，1代表全部 采集
+        probability: 1
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db2020?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.szh.springcloud.entities
+
+eureka:
+  client:
+    #表示是否将自己注册进EurekaServer，默认是true
+    register-with-eureka: true
+    #是否从EurekaServer抓取自己的注册信息，默认是true。单节点无所谓，多节点必须设置为true才能配合ribbon使用负载均衡
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+      #defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
+  instance:
+    instance-id: payment8001
+    #访问路径可以显示IP地址
+    prefer-ip-address: true
+    #eureka客户端向服务器端发送心跳的时间间隔，单位为S（默认是30S）
+    #lease-renewal-interval-in-seconds: 1
+    #eureka服务端在收到最后一次心跳请求后等待的时间上限，单位为S（默认为90S）,超时剔除服务
+    #lease-expiration-duration-in-seconds: 2

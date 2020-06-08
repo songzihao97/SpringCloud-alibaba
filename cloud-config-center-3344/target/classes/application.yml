@@ -1,0 +1,38 @@
+server:
+  port: 3344
+
+spring:
+  application:
+    name:  cloud-config-center #注册进Eureka服务器的微服务名
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/songzihao97/Springcloud2020Config.git #GitHub上面的git仓库名字
+          ####搜索目录
+          search-paths:
+            - Springcloud2020Config
+      ####读取分支
+      label: master
+  #rabbitmq配置
+  rabbitmq:
+    host: 192.168.216.132
+    port: 5672
+    username: guest
+    password: guest
+
+
+#服务注册到eureka地址
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+
+#rabbitmq配置，暴漏bus刷新配置端点
+#通过向中心发送消息来更新所有服务配置curl -X POST "http://localhost:3344/actuator/bus-refresh"
+#也可定点通知curl -X POST "http://localhost:3344/actuator/bus-refresh/config-client:3355" 在原有基础上加上微服务名称及端口号
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'bus-reFresh'
